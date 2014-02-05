@@ -4,6 +4,7 @@ from Tkinter import Tk, BOTH, RIGHT,StringVar,Text
 from ttk import Frame,Button,Style,Label,Entry
 import os,sys
 import subprocess
+from munkres import Munkres
 
 dir='/home/activatedgeek/Desktop'
 matrix = []
@@ -45,6 +46,14 @@ def simScore(fileapath,filebpath):
 			temp.append(sim)
 		matScore.append(temp)
 
+	m = Munkres()
+	for i in range(len(matScore)):
+		for j in range(len(matScore[i])):
+			matScore[i][j] = 1 - matScore[i][j]
+
+	results = m.compute(matScore)
+	return float(len(results))/len(astream)
+
 #gets all the text readable files
 def getASCII(dir):
 	import mimetypes
@@ -60,6 +69,22 @@ def getASCII(dir):
 			except subprocess.CalledProcessError:
 				n=-1
 	return result
+
+
+def populateMatrix(dir):
+	files = getASCII(dir)
+	n = len(files)
+	global matrix
+
+	for i in range(n):
+		temp = []
+		for j in range(i,n):
+			if j==i:
+				temp.append(1)
+			else:
+				score = simScore(file[i],file[j])
+
+		matrix.append(temp)
 
 class Window(Frame):
 	def __init__(self, parent):
@@ -77,15 +102,17 @@ class Window(Frame):
 		
 	def setButton(self):
 		self.quitButton = Button(self, text="Close",command=self.quit)
-		self.quitButton.place(x=580, y=250)
-		self.test = Button(self, text="Path",command=self.test)
-		self.test.place(x=400, y=250)
+		self.quitButton.place(x=520, y=250)
+		self.generate = Button(self, text="Generate",command=self.genButton)
+		self.generate.place(x=400, y=250)
 
-	def test(self):
+	def genButton(self):
 		t = self.pathBox.get()
 		if not os.path.isdir(t):
-			self.test.config(state='disabled')
-			print "not dir"
+			self.generate.config(state='disabled')
+		else:
+			import webbrowser
+			webbrowser.open('http://google.co.in/')
 
 	def setupInputs(self):
 		self.pathLabel = Label(self, text="Enter Full Directory Path", font=("Helvetica", 12))
