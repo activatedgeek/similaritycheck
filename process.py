@@ -1,8 +1,8 @@
 #!/usr/bin/python
 
-from Tkinter import Tk, BOTH, RIGHT,StringVar,Text
+from Tkinter import Tk, BOTH, RIGHT,StringVar,Text,DISABLED,NORMAL
 from ttk import Frame,Button,Style,Label,Entry
-import os,tkFileDialog
+import os,tkFileDialog,globals
 
 class Window(Frame):
 	def __init__(self, parent):
@@ -38,18 +38,48 @@ class Window(Frame):
 	def setButton(self):
 		self.quitButton = Button(self, text="Close",command=self.quit)
 		self.quitButton.place(x=520, y=250)
-		self.generate = Button(self, text="Generate",command=self.genButton)
-		self.generate.place(x=400, y=250)
 
-	def genButton(self):
+		self.browserButton = Button(self, text="Open Browser",command=self.browser)
+		self.browserButton.place(x=400, y=250)
+		self.browserButton.config(state=NORMAL)
+
+		self.generate = Button(self, text="Generate Data",command=self.genData)
+		self.generate.place(x=10, y=250)
+
+	def browser(self):
 		import webbrowser
-		#print "Opening browser..."
-		webbrowser.open('http://www.iith.ac.in/')
+		webbrowser.get('firefox').open('/home/activatedgeek/Desktop/fileSim/data/index.html')
+		self.browserButton.config(state=DISABLED)
 
 	def getDir(self):
-		self.dir = tkFileDialog.askdirectory(parent=self.parent,initialdir="/",title='Select a directory')
-		self.selpath['text'] = self.dir
+		globals.dir = tkFileDialog.askdirectory(parent=self.parent,initialdir="/",title='Select a directory')
+		self.selpath['text'] = globals.dir
+		#print globals.dir
 
+	#validate and process data
+	def genData(self):
+		valid = True
+		try:
+			globals.alpha = float(self.aEntry.get())
+		except ValueError:
+			globals.alpha = 0.0
+			valid = False
+		try:
+			globals.beta = float(self.bEntry.get())
+		except ValueError:
+			globals.beta = 0.0
+			valid = False
+
+		if not os.path.isdir(globals.dir) or globals.alpha>=1.0 or globals.beta>=1.0:
+			valid = False
+
+		if valid:
+			self.generate.config(state=DISABLED)
+			#from compute import main as computeMain
+			from jsonutil import main as jsonMain
+			jsonMain()
+			self.browserButton.config(state=NORMAL)
+			self.generate.config(state=NORMAL)
 		
 def main():
 	root = Tk()
