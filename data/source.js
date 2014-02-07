@@ -1,4 +1,3 @@
-
 $(document).ready(function(){
 	visual = d3.select(".visual");
 	vWidth = $(".visual").width();
@@ -6,7 +5,7 @@ $(document).ready(function(){
 	viewport = visual.append("svg").attr("width",vWidth).attr("height",vHeight).attr("id","dataVis");	
 
 	graph = d3.layout.force()
-					.gravity(.001)
+					.gravity(.01)
 					.distance(200)
 					.charge(-10000)
 					.size([vWidth,vHeight]);
@@ -18,9 +17,9 @@ function getJSON(file){
 	d3.json(file,function(error,json){
 		dirtitle = $("#dir").text();
 		dirtitle += json.dir;
+		dir = json.dir;
 		$("#dir").text(dirtitle);
 		colors = d3.scale.category20();
-
 		graph
 			.nodes(json.files)
 			.links(json.fileLinks)
@@ -30,12 +29,33 @@ function getJSON(file){
 					.data(json.fileLinks)
 					.enter().append("line")
 					.attr("class","link")
+					.on("click", function(d){
+						$("line").css("stroke","#999");
+						$(this).css("stroke","#e7191d");
+					})
+					.on("dblclick", function(d){
+						file1 = "",file2="";
+						$.post('fileStream.php',{file: dir+'/'+d.name},function(data,status){
+							if(status=="success")
+								file1 = data;
+						});
+						$.post('fileStream.php',{file: dir+'/'+d.name},function(data,status){
+							if(status=="success")
+								file2 = data;
+						});
+					})
 					.style("stroke-width", function(d){ return d.weight*20});
 
 		var node = viewport.selectAll(".node")
 					.data(json.files)
 					.enter().append("g")
 					.attr("class","node")
+					.on("click" , function(d){ 
+						$.post('fileStream.php',{file: dir+'/'+d.name},function(data,status){
+							if(status=="success")
+								file1 = data;
+						});
+					 })
 					.call(graph.drag);
 
 		node.append("text")
