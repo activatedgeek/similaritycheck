@@ -3,12 +3,13 @@ body {
 }
 
 .app{
+	position: relative;
 	text-align: center;
 	font-size: 3em;
 }
 
+/********Graph***********/
 .visual{
-	border: black solid 3px;
 	width: 100%;
 	height: 81%;
 }
@@ -20,3 +21,49 @@ body {
 .link{
 	stroke: #999;
 }
+/********Graph***********/
+
+/*****Overlay******/
+.file{
+	position: relative;
+	z-index: 1000;
+	height: 98%;
+	padding: 0.5em;
+	background-color: rgba(15%,15%,15%,0.5);
+	display: none;
+}
+
+.close{
+	position: relative;
+	float: right;
+	margin: 1em;
+	width: 6em;
+	height: 3em;
+	background-color: #33b5e5;
+	border: none;
+	border-radius: 1em; 
+}
+
+.stream{
+	background-color: white;
+	font-family:"Arial", serif;
+	margin: 1em;
+	padding: 0.5em;
+}
+#onefile{
+	float: left;
+}
+#file2{
+	float: right;
+}
+/*****Overlay******/
+
+/*****DATA******/
+.data{
+	position: absolute;
+	top: 0px;
+	z-index: 100;
+	width: 99%;
+	height: 100%;
+}
+/*****DATA******/

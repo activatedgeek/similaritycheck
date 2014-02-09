@@ -1,17 +1,31 @@
 $(document).ready(function(){
+	$(".file,#onefile,#twofile").css("display","none");
 	visual = d3.select(".visual");
 	vWidth = $(".visual").width();
 	vHeight = $(".visual").height();
-	viewport = visual.append("svg").attr("width",vWidth).attr("height",vHeight).attr("id","dataVis");	
+	viewport = visual.append("svg")
+				.attr("width",vWidth)
+				.attr("height",vHeight)
+				.attr("id","dataVis")
+				.attr("pointer-events", "all")
+				.call(d3.behavior.zoom().on("zoom", redraw)).on("dblclick.zoom", null);
 
 	graph = d3.layout.force()
-					.gravity(.01)
+					.gravity(0.1)
 					.distance(200)
-					.charge(-10000)
+					.charge(-400)
 					.size([vWidth,vHeight]);
 
 	getJSON("data.json");
+	
+	$(".close").click(function(){
+		$(".file,#onefile,#twofile").css("display","none");
+	});
 });
+
+function redraw(){
+	viewport.attr("transform","translate(" + d3.event.translate + ")"+ " scale(" + d3.event.scale + ")");
+}
 
 function getJSON(file){
 	d3.json(file,function(error,json){
@@ -33,8 +47,14 @@ function getJSON(file){
 						$("line").css("stroke","#999");
 						$(this).css("stroke","#e7191d");
 					})
+					.on("mouseout",function(d){
+						$("line").css("stroke","#999");
+					})
 					.on("click",function(d){
-
+						$("#file1").html(d.source.stream);
+						$("#file2").html(d.target.stream);
+						$(".file").css("display","block");
+						$("#twofile").css("display","block");
 					})
 					.style("stroke-width", function(d){ return d.weight*5});
 
@@ -42,8 +62,10 @@ function getJSON(file){
 					.data(json.files)
 					.enter().append("g")
 					.attr("class","node")
-					.on("click", function(d){
-						
+					.on("dblclick", function(d){
+						$("#onefile").html(d.stream);
+						$("#onefile").css("display","block");
+						$(".file").css("display","block");
 					})
 					.call(graph.drag);
 
@@ -54,10 +76,10 @@ function getJSON(file){
 
 		node.append("circle")
 			.attr("r",10)
-			.on("mouseover",function(){
+			.on("mouseover",function(d){
 				$(this).attr("r",20);
 			})
-			.on("mouseout",function(){
+			.on("mouseout",function(d){
 				$(this).attr("r",10);
 			})
 			.style("fill", function(d){ return colors(d.category);});
