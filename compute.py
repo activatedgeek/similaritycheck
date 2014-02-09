@@ -2,17 +2,6 @@ import os,subprocess
 from munkres import Munkres
 import globals
 
-#setup resulting matrix
-def setupMatrix(n):
-	globals.matrix = []
-	for i in range(n):
-		temp = []
-		j=0
-		while j<n:
-			temp.append(-1)
-			j+=1
-		globals.matrix.append(temp)
-
 #similarity calculation between pair of sentences
 def lineSimUtil(s,t,alpha):
 	s = s.split(' ')
@@ -26,20 +15,20 @@ def lineSimUtil(s,t,alpha):
 
 #similarity index for given pair of files
 def fileSimScore(fileapath,filebpath,alpha,beta):
-	astream = open(dir+'/'+fileapath,'r').read()
-	bstream = open(dir+'/'+filebpath,'r').read()
+	astream = open(globals.dir+'/'+fileapath,'r').read()
+	bstream = open(globals.dir+'/'+filebpath,'r').read()
 	astream = astream.split('\n')
 	bstream = bstream.split('\n')
 	if len(astream)>len(bstream):
 		astream, bstream = bstream, astream
 
 	matScore = []
-	for sWord in astream:
+	for s in astream:
 		temp = []
-		for tWord in bstream:
-			sWord = sWord.lower()
-			tWord = tWord.lower()
-			sim = lineSimUtil(sWord,tWord,alpha)
+		for t in bstream:
+			s = s.lower()
+			t = t.lower()
+			sim = lineSimUtil(s,t,alpha)
 			temp.append(sim)
 		matScore.append(temp)
 
@@ -58,7 +47,7 @@ def fileSimScore(fileapath,filebpath,alpha,beta):
 
 	score =  float(len(fres))/len(astream)
 	if score<beta:
-		score=0
+		score=0.0
 	return score
 
 #gets all the text readable files
@@ -79,20 +68,24 @@ def getASCII(dir):
 
 def populateMatrix(dir,alpha,beta):
 	globals.files = getASCII(dir)
-	n = len(files)
-	setupMatrix(n)
+	n = len(globals.files)
 
 	for i in range(n):
-		for j in range(i,n):
-			if j==i:
-				globals.matrix[i][j] = 1
+		temp = []
+		for j in range(n):
+			if j<=i:
+				temp.append(-1)
 			else:
-				globals.matrix[i][j] = fileSimScore(file[i],file[j],alpha)
+				score = fileSimScore(globals.files[i],globals.files[j],alpha,beta)
+				print score
+				temp.append(score)
+		globals.matrix.append(temp)
 
+	print globals.matrix
 	return True
 
 def main():
-	populateMatrix(globals.dir,globals.alpha,globals.beta)
+	result = populateMatrix(globals.dir,globals.alpha,globals.beta)
 
 if __name__=='__main__':
 	main()
