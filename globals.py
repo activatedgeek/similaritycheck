@@ -3,7 +3,7 @@ dir = ''
 files = None
 
 #matrix containing scores
-matrix = None
+matrix = []
 alpha = 0.0
 beta = 0.0
 
