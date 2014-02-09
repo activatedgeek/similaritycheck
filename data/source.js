@@ -103,7 +103,8 @@ function getJSON(file){
 						$(".file").css("display","block");
 						$("#twofile").css("display","block");
 					})
-					.style("stroke-width", function(d){ return d.weight*5});
+					.style("stroke-width", function(d){ return d.weight*5})
+					.style("stroke-opacity", function(d){ return Math.sin(d.weight);});
 
 		var node = viewport.selectAll(".node")
 					.data(json.files)
