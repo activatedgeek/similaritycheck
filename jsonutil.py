@@ -26,6 +26,29 @@ def genDummyData():
 	n = len(globals.matrix)
 	for i in range(n):
 		for j in range(i+1,n):
+			temp = {}
+			temp['source'] = i
+			temp['target'] = j
+			temp['weight'] = globals.matrix[i][j]
+			jlist.append(temp)
+
+	globals.jsonData['fileLinks'] = jlist
+
+def setupData():
+	globals.jsonData = {"dir": globals.dir}
+	fileList = []
+	for file in globals.files:
+		temp = {};
+		temp['name'] = file
+		temp['category'] = random.randint(0,len(globals.files))%20;
+		fileList.append(temp)
+
+	globals.jsonData['files'] = fileList
+
+	jlist = []
+	n = len(globals.matrix)
+	for i in range(n):
+		for j in range(i+1,n):
 			if globals.matrix[i][j]>globals.beta:
 				temp = {}
 				temp['source'] = i
@@ -36,7 +59,7 @@ def genDummyData():
 	globals.jsonData['fileLinks'] = jlist
 
 def generateData():
-	genDummyData()
+	setupData()
 	dumpData(globals.jsonData,'data.json')
 
 def main():
