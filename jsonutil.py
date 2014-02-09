@@ -42,7 +42,6 @@ def setupData():
 		temp['name'] = file
 		temp['category'] = random.randint(0,len(globals.files))%20;
 		stream = open(globals.dir+'/'+file,'r').read()
-		stream = stream.replace('\n',"</br>")
 		temp['stream'] = stream
 		fileList.append(temp)
 
@@ -52,12 +51,13 @@ def setupData():
 	n = len(globals.matrix)
 	for i in range(n):
 		for j in range(i+1,n):
-			if globals.matrix[i][j]>globals.beta:
-				temp = {}
-				temp['source'] = i
-				temp['target'] = j
-				temp['weight'] = globals.matrix[i][j]
-				jlist.append(temp)
+			temp = {}
+			temp['source'] = i
+			temp['target'] = j
+			temp['weight'] = globals.matrix[i][j]
+			globals.matrixLinks[i][j].sort()
+			temp['pairing'] = globals.matrixLinks[i][j]
+			jlist.append(temp)
 
 	globals.jsonData['fileLinks'] = jlist
 
