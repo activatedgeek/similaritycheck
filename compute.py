@@ -49,7 +49,7 @@ def fileSimScore(fileapath,filebpath,alpha,beta):
 	score =  float(len(fres))/len(astream)
 	if score<beta:
 		score=0.0
-	return score
+	return score,fres
 
 #gets all the text readable files
 def getASCII(dir):
@@ -69,18 +69,23 @@ def getASCII(dir):
 
 def populateMatrix(dir,alpha,beta):
 	globals.files = getASCII(dir)
+	globals.files.sort()
 	n = len(globals.files)
 
 	for i in range(n):
 		temp = []
+		links = []
 		for j in range(n):
 			if j<=i:
 				temp.append(-1)
+				links.append([])
 			else:
-				score = fileSimScore(globals.files[i],globals.files[j],alpha,beta)
+				score,combines = fileSimScore(globals.files[i],globals.files[j],alpha,beta)
 				temp.append(score)
+				links.append(combines)
 
 		globals.matrix.append(temp)
+		globals.matrixLinks.append(links)
 
 	return True
 
