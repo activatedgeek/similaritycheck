@@ -41,14 +41,14 @@ class Window(Frame):
 
 		self.browserButton = Button(self, text="Open Browser",command=self.browser)
 		self.browserButton.place(x=400, y=250)
-		self.browserButton.config(state=NORMAL)
+		self.browserButton.config(state=DISABLED)
 
 		self.generate = Button(self, text="Generate Data",command=self.genData)
 		self.generate.place(x=10, y=250)
 
 	def browser(self):
 		import webbrowser
-		webbrowser.get('firefox').open('/home/activatedgeek/Desktop/fileSim/data/index.html')
+		webbrowser.get('firefox').open('data/index.html')
 		self.browserButton.config(state=DISABLED)
 
 	def getDir(self):
@@ -75,7 +75,8 @@ class Window(Frame):
 
 		if valid:
 			self.generate.config(state=DISABLED)
-			#from compute import main as computeMain
+			from compute import main as computeMain
+			computeMain()
 			from jsonutil import main as jsonMain
 			jsonMain()
 			self.browserButton.config(state=NORMAL)
