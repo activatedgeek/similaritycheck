@@ -38,7 +38,7 @@ def setupData():
 	globals.jsonData = {"dir": globals.dir}
 	fileList = []
 	for file in globals.files:
-		temp = {};
+		temp = {}
 		temp['name'] = file
 		temp['category'] = random.randint(0,len(globals.files))%20;
 		stream = open(globals.dir+'/'+file,'r').read()
@@ -67,6 +67,7 @@ def generateData():
 
 def main():
 	generateData()
+	globals.resetGlobals()
 
 if __name__=='__main__':
 	main()
