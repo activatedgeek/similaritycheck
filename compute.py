@@ -19,6 +19,7 @@ def fileSimScore(fileapath,filebpath,alpha,beta):
 	bstream = open(globals.dir+'/'+filebpath,'r').read()
 	astream = astream.split('\n')
 	bstream = bstream.split('\n')
+
 	if len(astream)>len(bstream):
 		astream, bstream = bstream, astream
 
@@ -26,16 +27,16 @@ def fileSimScore(fileapath,filebpath,alpha,beta):
 	for s in astream:
 		temp = []
 		for t in bstream:
+			if s=='' or t=='':
+				temp.append(1.0)
+				continue
 			s = s.lower()
 			t = t.lower()
 			sim = lineSimUtil(s,t,alpha)
-			temp.append(sim)
+			temp.append(1.0 - sim)
 		matScore.append(temp)
 
 	m = Munkres()
-	for i in range(len(matScore)):
-		for j in range(len(matScore[i])):
-			matScore[i][j] = 1.0 - matScore[i][j]
 
 	results = m.compute(matScore)
 	fres = []
@@ -43,7 +44,7 @@ def fileSimScore(fileapath,filebpath,alpha,beta):
 	#remove all 0 weight connections (here inverted connections)
 	for row,col in results:
 		if matScore[row][col]!=1.0:
-			fres.append(1-matScore[row][col])
+			fres.append([row,col])
 
 	score =  float(len(fres))/len(astream)
 	if score<beta:
@@ -77,11 +78,10 @@ def populateMatrix(dir,alpha,beta):
 				temp.append(-1)
 			else:
 				score = fileSimScore(globals.files[i],globals.files[j],alpha,beta)
-				print score
 				temp.append(score)
+
 		globals.matrix.append(temp)
 
-	print globals.matrix
 	return True
 
 def main():
