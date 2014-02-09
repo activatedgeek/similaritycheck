@@ -1,20 +1,28 @@
 <!DOCTYPE>
 <html>
-<head>
-	<title>File Similarity Visualization</title>
-	<meta http-equiv="content-type" content="text/html; charset=UTF8">
-	<link rel="stylesheet" type="text/css" href="style.css">
-	<script type="text/javascript" src="d3.js"></script>
-	<script type="text/javascript" src="jquery-2.1.0.js"></script>
-	<script type="text/javascript" src="source.js"></script>
-</head>
+	<head>
+		<title>File Similarity Visualization</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF8">
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<script type="text/javascript" src="d3.js"></script>
+		<script type="text/javascript" src="jquery-2.1.0.js"></script>
+		<script type="text/javascript" src="source.js"></script>
+	</head>
 	<body>
 		<div class="file">
 			<input class="close" type="button" value="Close"/>
-			<div class="stream" id="onefile">
+			<div>
+				<div id="onefilename">
+				</div>
+				<div class="stream" id="onefile">
+				</div>
 			</div>
 			<div id="twofile">
 				<table>
+					<tr>
+					  <td id="file1name" style="background-color: black; color: white;text-align:center;">left file</td>
+					  <td id="file2name" style="background-color: black; color: white;text-align:center;">right file</td>
+					</tr>
 					<tr>
 					  <td><div class="stream" id="file1"></div></td>
 					  <td><div class="stream" id="file2"></div></td>
