@@ -29,33 +29,22 @@ function getJSON(file){
 					.data(json.fileLinks)
 					.enter().append("line")
 					.attr("class","link")
-					.on("click", function(d){
+					.on("mouseover", function(d){
 						$("line").css("stroke","#999");
 						$(this).css("stroke","#e7191d");
 					})
-					.on("dblclick", function(d){
-						file1 = "",file2="";
-						$.post('fileStream.php',{file: dir+'/'+d.name},function(data,status){
-							if(status=="success")
-								file1 = data;
-						});
-						$.post('fileStream.php',{file: dir+'/'+d.name},function(data,status){
-							if(status=="success")
-								file2 = data;
-						});
+					.on("click",function(d){
+
 					})
-					.style("stroke-width", function(d){ return d.weight*20});
+					.style("stroke-width", function(d){ return d.weight*5});
 
 		var node = viewport.selectAll(".node")
 					.data(json.files)
 					.enter().append("g")
 					.attr("class","node")
-					.on("click" , function(d){ 
-						$.post('fileStream.php',{file: dir+'/'+d.name},function(data,status){
-							if(status=="success")
-								file1 = data;
-						});
-					 })
+					.on("click", function(d){
+						
+					})
 					.call(graph.drag);
 
 		node.append("text")
@@ -65,6 +54,12 @@ function getJSON(file){
 
 		node.append("circle")
 			.attr("r",10)
+			.on("mouseover",function(){
+				$(this).attr("r",20);
+			})
+			.on("mouseout",function(){
+				$(this).attr("r",10);
+			})
 			.style("fill", function(d){ return colors(d.category);});
 
 		graph.on("tick",function(){
