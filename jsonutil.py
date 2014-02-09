@@ -41,6 +41,9 @@ def setupData():
 		temp = {};
 		temp['name'] = file
 		temp['category'] = random.randint(0,len(globals.files))%20;
+		stream = open(globals.dir+'/'+file,'r').read()
+		stream = stream.replace('\n',"</br>")
+		temp['stream'] = stream
 		fileList.append(temp)
 
 	globals.jsonData['files'] = fileList
