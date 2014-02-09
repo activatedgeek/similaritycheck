@@ -106,6 +106,9 @@ function getJSON(file){
 					.style("stroke-width", function(d){ return d.weight*5})
 					.style("stroke-opacity", function(d){ return Math.sin(d.weight);});
 
+		link.append("title")
+				.text(function(d){return d.weight;});
+
 		var node = viewport.selectAll(".node")
 					.data(json.files)
 					.enter().append("g")
