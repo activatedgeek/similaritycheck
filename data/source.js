@@ -40,7 +40,7 @@ function getJSON(file){
 		dirtitle = $("#dir").text();
 		dirtitle += json.dir;
 		dir = json.dir;
-		$("#dir").text(dirtitle);
+		$("#dir").html("<b>"+dirtitle+"</b>");
 		colors = d3.scale.category20();
 		graph
 			.nodes(json.files)
