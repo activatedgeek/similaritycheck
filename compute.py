@@ -70,6 +70,7 @@ def getASCII(dir):
 def populateMatrix(dir,alpha,beta):
 	globals.files = getASCII(dir)
 	globals.files.sort()
+	print globals.files
 	n = len(globals.files)
 
 	for i in range(n):
